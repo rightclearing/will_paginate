@@ -116,8 +116,10 @@ module WillPaginate
       end
 
       # workaround for Active Record 3.0
-      def scoped(options = nil)
-        copy_will_paginate_data super
+      if !defined?(::ActiveRecord::Scoping) or ::ActiveRecord::Scoping::ClassMethods.method_defined? :with_scope
+        def scoped(options = nil)
+          copy_will_paginate_data super
+        end
       end
 
       def to_a
